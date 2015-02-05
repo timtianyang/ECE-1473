@@ -10,13 +10,16 @@ r=0.5;
 figure(2)
 subplot(2,1,1)
 stem(n,an)
+title('random bits')
+xlabel('number')
+ylabel('bits')
 figure(1)
 [h,t]=Gaussian_Pulse(Kt,bit_period,sample_per_bit);
-plot(t,h,'*')
+plot(t,h)
 %axis([-5 5 -0.5 1.8])
 xlabel('time seconds')
 ylabel('signal')
-title('h(t) using RCRO')
+title('h(t) using Guasian pulse')
 size_of_s=length(t)+(num_random_bits-1)*sample_per_bit;
 s_t=zeros(1,size_of_s);
 tt=linspace(t(1),t(length(t))+(num_random_bits-1)*bit_period,size_of_s);
@@ -31,7 +34,7 @@ subplot(2,1,2)
 plot(tt,s_t)
 xlabel('time seconds')
 ylabel('signal')
-title('s(t) using RCRO pulse')
+title('s(t) using Guasian pulse')
 hold on
 for l=0:bit_period:tt(length(tt))-bit_period*Kt
     plot(l,interp1(tt,s_t,l),'r*'); 
