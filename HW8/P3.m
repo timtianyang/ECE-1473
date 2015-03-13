@@ -39,7 +39,7 @@ xlabel('time seconds')
 ylabel('signal')
 title(strcat('s(t) using RCRO pulse r= ',sprintf('%0.3f',r)));
 
-
+%return
 %%%%drawing dots for sample time
 hold on
 peak=h(t==0);

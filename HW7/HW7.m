@@ -4,6 +4,7 @@ close all
 
 sample_per_bit=16;
 bit_period=1;
+num_random_bits=32;
 A=5;
 N=512; %fft
 R=100;%bits/s
@@ -20,7 +21,7 @@ tempPSD=0*f;
 
 for i=1:iterations
 %generating random signals
-[n,an]=random_bits(32,[A,-A]);
+[n,an]=random_bits(num_random_bits,[A,-A]);
 [ s_t,tt ] = get_baseband( h,t,bit_period,an,sample_per_bit );
 tt=tt(s_t~=0);%getting rid of zeros
 s_t=s_t(s_t~=0);
