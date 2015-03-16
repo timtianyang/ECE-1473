@@ -23,19 +23,6 @@ iterations=100;
 [h,t]=RootRCRO_Pulse(Kt,bit_period,sample_per_bit,r);
 
 
-
-
-%%%%modulation and detection
-
-
-
-
-
-
-
-
-
-
 f=linspace(-fs/2,fs/2,N);
 theory_PSD=Ac^2/16*(Tb*(sinc((f-fc)*Tb)).^2)+Ac^2/16*(Tb*(sinc((f+fc)*Tb)).^2);
 figure(3)%%plotting the PSD from equation
@@ -106,8 +93,8 @@ figure(3)%%plotting the PSD from equation
 subplot(2,1,2)
 xlabel('freq (Hz)')
 ylabel('|S_t|')
-title('average PSD vs. theory')
-subplot(2,1,1)
+title('simulated PSD vs. theory')
+subplot(2,1,2)
 xlabel('freq (Hz)')
 ylabel('|S_t|')
 title('one realization of PSD')

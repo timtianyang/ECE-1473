@@ -2,7 +2,7 @@ clear
 clc
 close all
 num_random_bits=20;
-bit_period=1/30;
+bit_period=1/200;
 sample_per_bit=16;
 Kt=5;
 r=0.25;
