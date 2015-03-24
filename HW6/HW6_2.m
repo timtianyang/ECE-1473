@@ -6,6 +6,7 @@ bit_period=1/200;
 sample_per_bit=16;
 Kt=5;
 r=0.25;
+R=1/bit_period;
 figure(1)
 
 
@@ -123,5 +124,15 @@ for noise_std=1:25
     ylabel('receiver output')
     annotation('textbox', [0.25,0.8,0.1,0.1],...
            'String', num2str(an));
-    pause
+   
 end
+
+%%theoretical
+figure(10)
+Eb=sum(h.^2)/(sample_per_bit*R);
+noise_length=200;
+noise_var_list=(linspace(0.001,10,noise_length));
+x=Eb./noise_var_list;
+hold on
+plot(10*log10(x),(qfunc(sqrt(2*x))))
+hold off
