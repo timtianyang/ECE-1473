@@ -15,9 +15,9 @@ for t1=1:length(t)
     numr=(pi*R*t(t1)*(1-(4*R*r*t(t1)).^2));
    if t(t1)==0
        h(t1)=1-r+4*r/pi;       
-   elseif abs((abs(t(t1))-Tb/4/r))<=time_res    %percision sucks     
+   elseif abs((abs(t(t1))-Tb/4/r))<time_res/1.5   %percision sucks     
        h(t1)=r/2^0.5*((1+2/pi)*sin(pi/4/r)+(1-2/pi)*cos(pi/4/r)) ; 
-       t(t1);
+       t(t1)
    else 
        
        h(t1)=denom./numr;     
@@ -25,5 +25,7 @@ for t1=1:length(t)
    end   
    
 end
+figure(20)
+plot(t,h)
 end
 
