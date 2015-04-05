@@ -11,7 +11,7 @@ function [ s_t,tt ] = get_baseband( pulse,t,random_bits,sample_per_bit )
     
     tt=linspace(t(1),t(1)+dt*(size_of_s-1),size_of_s);
     s_t(1,1:pulse_length)=s_t(1,1:pulse_length)+pulse*random_bits(1);
-    if random_bits==1
+    if num_random_bits==1
         return
     end
     %generating signals

@@ -14,8 +14,8 @@ num_random_bits=6;%%%%%%%%%%%%%%%%%%%%%
 A=1;%bit 1 is represented as 1, bit 0 as -1
 
 %generating a pulse%%%%%%%%%%%%%%%%%%%%%
-%[h,t]=RootRCRO_Pulse(Kt,Tb,sample_per_bit,r);%RRCRO pulse
-[ h,t ] = rect_pulse(Kt, Tb,sample_per_bit );%Rect pulse
+[h,t]=RootRCRO_Pulse(Kt,Tb,sample_per_bit,r);%RRCRO pulse
+%[ h,t ] = rect_pulse(Kt, Tb,sample_per_bit );%Rect pulse
 %[h,t]=root_rcro( Kt,Tb, sample_per_bit, r);%kevins RRCRO has blips as
 %well, it might be the basband function
 
@@ -97,7 +97,7 @@ ylabel('channel Q')
 title('odd bits')
 subplot(3,2,6)
 plot(t_q,s_trans,'-r')
-title('QPSK I minus Q without clipping')
+title('OQPSK I minus Q without clipping')
 
 figure(3)
 %clipping off the first and the last Tb/2: http://en.wikipedia.org/wiki/Phase-shift_keying
@@ -125,3 +125,36 @@ title('odd bits')
 subplot(3,1,3)
 plot(t_q,s_trans,'-r')
 title('OQPSK I minus Q with clipping')
+
+%demodulating
+s_i=s_trans.*cos(wc*t_i)*2;
+s_q=-s_trans.*sin(wc*t_q)*2;
+rt_q=conv(s_q,h,'same')/sample_per_bit;%match filter
+rt_i=conv(s_i,h,'same')/sample_per_bit;%match filter
+figure(4)
+subplot(2,1,1)
+hold on
+plot(t_i,rt_i)
+title('i channel')
+for i=1:length(a_i)
+   if a_i(i)<0
+       plot((i-1)*Tb,-A,'*r') 
+   else
+       plot((i-1)*Tb,A,'*r') 
+   end
+end
+hold off
+
+
+subplot(2,1,2)
+title('q channel')
+hold on
+plot(t_q,rt_q)
+for i=1:length(a_q)
+   if a_q(i)<0
+       plot((i-1)*Tb,-A,'*r') 
+   else
+       plot((i-1)*Tb,A,'*r') 
+   end
+end
+hold off

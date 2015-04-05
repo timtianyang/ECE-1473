@@ -17,7 +17,7 @@ for t1=1:length(t)
        h(t1)=1-r+4*r/pi;       
    elseif abs((abs(t(t1))-Tb/4/r))<time_res/1.5   %percision sucks     
        h(t1)=r/2^0.5*((1+2/pi)*sin(pi/4/r)+(1-2/pi)*cos(pi/4/r)) ; 
-       t(t1)
+       %t(t1)
    else 
        
        h(t1)=denom./numr;     
