@@ -1,9 +1,9 @@
 clc;clear;close all;
 Kt=2;
-R=200;
+R=500;
 Tb=1/R;
 r=0.5;%small blips when r=0.6,0.5
-sample_per_bit=512;%high fc might need more precision
+sample_per_bit=1024;%high fc might need more precision
 
 %%%this has too be a even number for now
 num_random_bits=100;%%%%%%%%%%%%%%%%%%%%%
@@ -11,7 +11,7 @@ num_random_bits=100;%%%%%%%%%%%%%%%%%%%%%
 fc=10000;
 wc=2*pi*fc;
 Ac=1;
-iterations=20;
+iterations=200;
 
 
 
@@ -145,7 +145,7 @@ end
 hold off
 
 
-figure(5)
+
 N=length(s_trans);
 fs=sample_per_bit*R;
 d_t=1/fs;
@@ -162,16 +162,13 @@ theory_PSD_R = GenRCRFreq(f - fc, Tb, r)/2;
 theory_PSD = theory_PSD_L + theory_PSD_R;
 theory_PSD=theory_PSD/2*Tb*2;
 
-theoretical_RCRO_R = RCROfreq_kevin( Tb,r,1 ,1,f,fc);
-theoretical_RCRO_L = RCROfreq_kevin( Tb,r,1 ,1,f,-fc);
-theoretical_RCRO=theoretical_RCRO_R+theoretical_RCRO_L;
-theoretical_RCRO=theoretical_RCRO*2/4*0.707*0.707*0.707;
-%theoretical_RCRO(f>0)=2*Tb/4*(sinc((f(f<0)-fc)*Tb)).^2;
+% theoretical_RCRO_R = RCROfreq_kevin( Tb,r,1 ,1,f,fc);
+% theoretical_RCRO_L = RCROfreq_kevin( Tb,r,1 ,1,f,-fc);
+% theoretical_RCRO=theoretical_RCRO_R+theoretical_RCRO_L;
+% theoretical_RCRO=theoretical_RCRO*2/4*0.707*0.707*0.707;
+% %theoretical_RCRO(f>0)=2*Tb/4*(sinc((f(f<0)-fc)*Tb)).^2;
 %theoretical_RCRO(f<0)=2*Tb/4*(sinc((f(f<0)+fc)*Tb)).^2;
 
-plot(f,PSD)
-hold on
-plot(f,theory_PSD)
 
 
 
@@ -234,9 +231,7 @@ for i=1:iterations
     
     
     
-    %PSD calculation
-    %   figure(5)
-    
+    %PSD calculation  
     F=fft(s_trans);
     F=fftshift(abs(F));
     F=F*d_t;%normalize
@@ -252,11 +247,14 @@ average_PSD=average_PSD/iterations;
 plot(f,average_PSD)
 hold on
 plot(f,theory_PSD,'r')
-
+xlabel('f (Hz)')
+ylabel('PSD')
+title('PSD with a fudge factor of 2')
 
 figure(7)
-plot(10*log10(average_PSD))
+plot(f,10*log10(average_PSD))
 hold on
-plot(10*log10((theory_PSD)))
-
-title('PSD with a fudge factor of 0.707')
+plot(f,10*log10((theory_PSD)))
+xlabel('f (Hz)')
+ylabel('PSD(dB)')
+title('PSD(dB) with a fudge factor of 2')
