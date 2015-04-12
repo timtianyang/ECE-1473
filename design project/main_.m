@@ -1,9 +1,9 @@
 clc;clear;close all;
-Kt=2;
+Kt=20;
 R=500;
 Tb=1/R;
 r=0.5;%small blips when r=0.6,0.5
-sample_per_bit=1024;%high fc might need more precision
+sample_per_bit=128;%high fc might need more precision
 
 %%%this has too be a even number for now
 num_random_bits=100;%%%%%%%%%%%%%%%%%%%%%
@@ -160,7 +160,7 @@ average_PSD=0*PSD;
 theory_PSD_L = GenRCRFreq(f + fc, Tb, r)/2;
 theory_PSD_R = GenRCRFreq(f - fc, Tb, r)/2;
 theory_PSD = theory_PSD_L + theory_PSD_R;
-theory_PSD=theory_PSD/2*Tb*2;
+theory_PSD=theory_PSD/2*Tb;
 
 % theoretical_RCRO_R = RCROfreq_kevin( Tb,r,1 ,1,f,fc);
 % theoretical_RCRO_L = RCROfreq_kevin( Tb,r,1 ,1,f,-fc);
@@ -215,22 +215,13 @@ for i=1:iterations
     end
     
     s_trans=s_i-s_q;
-    
-    
-    
-    
+      
     %demodulating
     s_i=s_trans.*cos(wc*t_i)*2/Ac;
     s_q=-s_trans.*sin(wc*t_q)*2/Ac;
     rt_q=conv(s_q,h,'same')/sample_per_bit;%match filter
     rt_i=conv(s_i,h,'same')/sample_per_bit;%match filter
-    
-    
-    
-    
-    
-    
-    
+        
     %PSD calculation  
     F=fft(s_trans);
     F=fftshift(abs(F));
