@@ -6,7 +6,7 @@ r=0.5;%small blips when r=0.6,0.5
 sample_per_bit=128;%high fc might need more precision
 
 %%%this has too be a even number for now
-num_random_bits=50;%%%%%%%%%%%%%%%%%%%%%
+num_random_bits=10;%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fc=10000;
 wc=2*pi*fc;
@@ -47,37 +47,19 @@ a_q=an(mod(n,2) ~= 0);
 % Figure for report
 subplot(3,1,1)
 stem(n-1, an)
-%axis([-19 26 -2 2]);
+axis([-19 26 -2 2]);
 title('Random bit sequence');
 xlabel('Bit number');
 ylabel('an');
 subplot(3,1,2)
 plot(t_q,m_q)
-hold on;
-for i=1:length(a_q)
-    if a_q(i)<0
-        plot((i-1)*Tb,-A,'*r')
-    else
-        plot((i-1)*Tb,A,'*r')
-    end
-end
-hold off;
-%axis([-.04 .05 -2 2]);
+axis([-.04 .05 -2 2]);
 title('Q channel, receives odd bits');
 xlabel('Time (s)');
 ylabel('Amplitude');
 subplot(3,1,3)
 plot(t_i,m_i)
-hold on;
-for i=1:length(a_i)
-    if a_i(i)<0
-        plot((i-1)*Tb,-A,'*r')
-    else
-        plot((i-1)*Tb,A,'*r')
-    end
-end
-hold off
-%axis([-.04 .05 -2 2]);
+axis([-.04 .05 -2 2]);
 title('I channel, receives even bits');
 xlabel('Time (s)');
 ylabel('Amplitude');
@@ -132,7 +114,7 @@ hold on
 plot(t_i,m_i,'-r')
 hold off
 xlabel('Time (s)')
-%axis([-.01 .02 -2 2]);
+axis([-.01 .02 -2 2]);
 ylabel('Amplitude (V)')
 title('I Channel Modulated')
 subplot(3,1,2)
@@ -142,12 +124,12 @@ plot(t_q,m_q,'-r')
 hold off
 xlabel('Time (s)')
 ylabel('Amplitude (V)')
-%axis([-.01 .02 -2 2]);
+axis([-.01 .02 -2 2]);
 title('Q Channel Modulated')
 subplot(3,1,3)
 plot(t_q,s_trans,'-r')
 title('OQPSK I minus Q')
-%axis([-.01 .02 -2 2]);
+axis([-.01 .02 -2 2]);
 
 s_trans_n = s_trans + sqrt(noise_variance)*randn(1, length(s_trans));
 
@@ -249,10 +231,10 @@ F=fftshift(abs(F));
 F=F*d_t;%normalize
 PSD=abs(F.^2)./T;
 average_PSD=0*PSD;
-theory_PSD_L = GenRCRFreq(f + fc, Tb, r);
-theory_PSD_R = GenRCRFreq(f - fc, Tb, r);
+theory_PSD_L = GenRCRFreq(f + fc, Tb, r)/4;
+theory_PSD_R = GenRCRFreq(f - fc, Tb, r)/4;
 theory_PSD = theory_PSD_L + theory_PSD_R;
-theory_PSD=theory_PSD*Tb*2;
+theory_PSD=theory_PSD*Tb*10;
 
 % theoretical_RCRO_R = RCROfreq_kevin( Tb,r,1 ,1,f,fc);
 % theoretical_RCRO_L = RCROfreq_kevin( Tb,r,1 ,1,f,-fc);
@@ -332,7 +314,7 @@ hold on
 plot(f,theory_PSD,'r')
 xlabel('f (Hz)')
 ylabel('PSD')
-title('PSD (W) of theoretical vs simulated')
+title('PSD with a fudge factor of 2')
 
 figure(6)
 plot(f,10*log10(average_PSD))
@@ -346,7 +328,7 @@ title('PSD(dB) of theoretical vs simulated')
 
 disp('calculating BER..')
 % Error detection
-trials = 10;
+trials = 50;
 % Generate noise parameters, starting from ebN0 first
 % guarantees theoretical will always be right.
 noise_length = 50;
@@ -358,12 +340,7 @@ h3=h.*sin(wc.*t)/2;
 h4=(sum((h2).^2)+sum((h3).^2));
 Eb = h4 * (Tb/sample_per_bit);
 
-shannon = 10000*log2(1+ebN0);
-figure(8);
-plot(ebN0db,shannon)
-title('Shannon Capacity for SNR values');
-xlabel('SNR (dB)');
-ylabel('bits/sec');
+shannon = 
 noise_variance =  fs .* Eb ./ebN0 ;
 p_e = 0;
 for p = 1:noise_length
